@@ -1,0 +1,44 @@
+name: 大項目・中項目
+description: WBS の大項目（業務・工程のまとまり）または中項目（機能・ブロック）を登録する
+title: "[WBS No] "
+labels: ["開発"]
+body:
+  - type: input
+    id: wbs_no
+    attributes:
+      label: WBS No
+      description: 例 1 / 1.01
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 区分
+      options:
+        - 大項目
+        - 中項目
+    validations:
+      required: true
+  - type: input
+    id: item_id
+    attributes:
+      label: ID
+      description: 中項目（機能）の場合。例 B機能
+  - type: input
+    id: business
+    attributes:
+      label: 業務
+    validations:
+      required: true
+  - type: textarea
+    id: plan
+    attributes:
+      label: 予定
+      description: 子の作業の最初の予定開始〜最後の予定終了。予定工数は、作業にだけ入れる（二重計上を避けるため）
+      value: |
+        - 予定開始:
+        - 予定終了:
+  - type: textarea
+    id: note
+    attributes:
+      label: 備考

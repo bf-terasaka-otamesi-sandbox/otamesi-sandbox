@@ -1,0 +1,63 @@
+name: 作業
+description: WBS の作業（工程）を登録する
+title: "[WBS No] "
+labels: ["開発"]
+body:
+  - type: input
+    id: wbs_no
+    attributes:
+      label: WBS No
+      description: 例 1.01.3（タイトルの先頭にも [WBS No] を書く）
+    validations:
+      required: true
+  - type: input
+    id: item_id
+    attributes:
+      label: ID
+      description: 例 B機能
+  - type: input
+    id: business
+    attributes:
+      label: 業務
+    validations:
+      required: true
+  - type: dropdown
+    id: process
+    attributes:
+      label: 工程
+      description: 工程定義シートの Step（実施順は 1 → 2 → 7 → 3 → 4 → 5 → 6 → 8）
+      options:
+        - "Step 1：仕様分析"
+        - "Step 2：仕様分析レビュー"
+        - "Step 3：実装"
+        - "Step 4：実装レビュー"
+        - "Step 5：単体試験実施"
+        - "Step 6：単体試験実施結果レビュー"
+        - "Step 7：設計・課題検討"
+        - "Step 8：単体テスト（動作確認）"
+    validations:
+      required: true
+  - type: textarea
+    id: plan
+    attributes:
+      label: 予定
+      description: 予定開始・予定終了・予定工数（人日）。値は Projects のフィールドにも入れる
+      value: |
+        - 予定開始:
+        - 予定終了:
+        - 予定工数:  人日
+    validations:
+      required: true
+  - type: textarea
+    id: note
+    attributes:
+      label: 備考
+  - type: checkboxes
+    id: dod
+    attributes:
+      label: 完了条件
+      description: すべて満たしたら、進捗率を 100 にしてクローズする
+      options:
+        - label: 工程定義の完了条件（DoD）を満たした
+        - label: 実績開始日・実績終了日・実績工数を Projects に入力した
+        - label: 進捗率を 100 にした
