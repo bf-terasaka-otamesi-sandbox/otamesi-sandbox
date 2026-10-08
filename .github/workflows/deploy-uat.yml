@@ -1,0 +1,45 @@
+name: deploy-uat
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "再デプロイするコミットまたはタグ（空なら main の最新）"
+        required: false
+
+concurrency:
+  group: uat
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: uat
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+      - name: ダミーデプロイ
+        env:
+          TARGET: ${{ secrets.DEPLOY_TARGET_URL }}
+          REQUESTED: ${{ inputs.ref || github.sha }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          echo "ユーザーレビュー環境へデプロイ: requested=$REQUESTED actor=$ACTOR"
+          echo "HEAD=$(git rev-parse HEAD)"
+          echo "target=$TARGET"
+          sleep 20
+      - name: 記録
+        env:
+          REQUESTED: ${{ inputs.ref || github.sha }}
+        run: |
+          {
+            echo "### ユーザーレビュー環境へのデプロイ"
+            echo "- 対象: $REQUESTED"
+            echo "- HEAD: $(git rev-parse HEAD)"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,40 @@
+name: deploy-verification
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: verification
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: verification
+    steps:
+      - uses: actions/checkout@v4
+      - name: ダミーデプロイ
+        env:
+          TARGET: ${{ secrets.DEPLOY_TARGET_URL }}
+          REF_NAME: ${{ github.ref_name }}
+          SHA: ${{ github.sha }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          echo "検証環境へデプロイ: ref=$REF_NAME sha=$SHA actor=$ACTOR"
+          echo "target=$TARGET"
+          sleep 60
+      - name: 記録
+        env:
+          REF_NAME: ${{ github.ref_name }}
+          SHA: ${{ github.sha }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          {
+            echo "### 検証環境へのデプロイ"
+            echo "- ブランチ: $REF_NAME"
+            echo "- コミット: $SHA"
+            echo "- 実行者: $ACTOR"
+          } >> "$GITHUB_STEP_SUMMARY"
